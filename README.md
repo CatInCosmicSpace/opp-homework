@@ -7,5 +7,5 @@
 Собрать это всё можно командами:
 ```
 python3 ./main.py
-latexmk -synctex=1 -interaction=nonstopmode -file-line-error -pdf  .\main.tex
+latexmk -synctex=1 -interaction=nonstopmode -file-line-error -pdf  ./main.tex
 ```

@@ -1,0 +1,21 @@
+sudo: required
+dist: bionic
+before_install:
+- sudo apt-get update
+- sudo apt install latexmk -y
+- sudo apt install texlive-extra-utils texlive-latex-recommended texlive-base texlive-lang-cyrillic
+  texlive-science texlive texlive-latex-extra texlive-formats-extra cm-super xindy
+- tlmgr init-usertree
+- sudo apt install python3 python3-pip
+- sudo pip3 install matplotlib numpy jinja2
+script:
+- python3 ./main.py
+- latexmk -synctex=1 -interaction=nonstopmode -file-line-error -pdf  ./main.tex
+deploy:
+  provider: releases
+  skip_cleanup: true
+  api_key:
+    secure: duiFm3hN3NpgU2kOvprExvOWrzhZwJSttlTnrlcJPHYRV5tnO71/53mbVoKKjVmtL0GIcby1sXAHWWDGvmA5jpBTdJ/4FihPT8yfaz0levEzbQbya62+1AcaYpFsxehAwrS7TckE2MCqCturwyjvJVlRsdVCQtI7mWwZJuGKlMcwHMG/LBQNgcteQEFpukc0zJSnMIVrk2+Oj1veDyQlNmE7/ev9bhaAH1Jssos0UHMWejzmbelke6Ze2UVfZJWHQdyvK45owsex5mdpVjIF+FCKo+ZR51u/IYm/sHSGaPAPAJKgM4mr1Q7lB2ZniFjPsQgJpQU8GLQARjo+9rTiiKEcZPR7+I0KnEyxQeqKO8Sik4NhlLjgenytRanBcUEsMKB/ASnwlqcSSeT+5nIx8gDbVqFdNVyNIzkj2Nujkwb9molqGsm44VFzQPtkQxkIHMHxVyczt+wnveeorUUOC+CEmWXwCb8zntKdeglQrMLG5oakTmzjNTOjZ4oniE81uZSg6d/YGD9ne7cw8EX2BRI0lCSC5MuDBhdlzZluWAlBZh7YtO7htNM54wmqI8p1Z+tQEDIrfS3eW2m7ys5rWNkgx65TWvCFWrCn8zdVEajlCdg3SCR/KDYLQMoBl2tCdB5CsqijYCSIJtmgyw+RzcdGYydziatnxU51Xly1YNA=
+  file: "./main.pdf"
+  on:
+    repo: CatInCosmicSpace/opp-homework
