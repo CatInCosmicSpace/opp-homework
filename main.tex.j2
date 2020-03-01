@@ -1,91 +1,108 @@
 \documentclass[utf8, 14pt, bold]{G7-32}
 \include{preamble.inc}
-\include{macros.inc}
 
 \usepackage{tikz}
 \usetikzlibrary{automata,positioning}
 
 \begin{document}
-    \include{title-page}
-    \section*{\centering Задача №1. Расчёт производственного цикла}
-    \begin{center}Содержание задачи.\end{center}
-    \begin{enumerate}[1.]
-        \item Рассчитать длительность технологического цикла простого процесса при последовательном, параллельном и параллельно-последовательном видах движения партии деталей в производстве.
-        \item Рассчитать длительность производственного цикла простого процесса при последовательном, параллельном и параллельно-последовательном видах движения партии деталей, приняв среднюю длительность межоперационных перерывов $t_{\text{мо}}$: при последовательном виде движения партии "--- 90 мин, при параллельно-последовательном "--- 30 мин, при параллельном "--- 5 мин (в расчёте на передаточную партию).
-        \item Построить в масштабе графики производственного цикла простого процесса при различных видах движения партии и определить погрешность графического построения в процентах.
-        \item Сопоставить длительность технологического и производственного циклов простого процесса при различных видах движения партии и сделать выводы о влиянии вида движения (характере передач) на длительность технологического и производственного циклов.
-    \end{enumerate}
+\include{title-page}
+\section*{\centering Задача №1. Расчёт производственного цикла}
+\begin{center}Содержание задачи.\end{center}
+\begin{enumerate}[1.]
+    \item Рассчитать длительность технологического цикла простого процесса при последовательном, параллельном и параллельно-последовательном видах движения партии деталей в производстве.
+    \item Рассчитать длительность производственного цикла простого процесса при последовательном, параллельном и параллельно-последовательном видах движения партии деталей, приняв среднюю длительность межоперационных перерывов $t_{\text{мо}}$: при последовательном виде движения партии "--- 90 мин, при параллельно-последовательном "--- 30 мин, при параллельном "--- 5 мин (в расчёте на передаточную партию).
+    \item Построить в масштабе графики производственного цикла простого процесса при различных видах движения партии и определить погрешность графического построения в процентах.
+    \item Сопоставить длительность технологического и производственного циклов простого процесса при различных видах движения партии и сделать выводы о влиянии вида движения (характере передач) на длительность технологического и производственного циклов.
+\end{enumerate}
 
-    \begin{center}Данные к решению задачи.\end{center}
+\begin{center}Данные к решению задачи.\end{center}
 
-    Величина обработочной партии: \VAR{parameters.processing_batch}.
+Величина обработочной партии: \VAR{parameters.processing_batch}.
 
-    Величина транспортной (передаточной) партии: \VAR{parameters.transport_batch}.
+Величина транспортной (передаточной) партии: \VAR{parameters.transport_batch}.
 
-    Технологический процесс с нормами времени $t_{\text{шт}}$ и фронтом работ $C$ по операциям
+Технологический процесс с нормами времени $t_{\text{шт}}$ и фронтом работ $C$ по операциям
 приведён в таблице~\ref{table1}.
-    \begin{table}[ht!]
-        \caption{Исходные данные для задачи}
-        \begin{tabular}{|c|c|c|c|c|c|c|c|c|}\hline
-            №№ операций \BLOCK{for i in range(parameters.operation_number)}& \VAR{i + 1}\BLOCK{endfor}\\\hline
-            $t_{\text{шт}}$ \BLOCK{for i in parameters.process_times} & \VAR{i} \BLOCK{endfor}\\\hline
-            $C$ \BLOCK{for i in parameters.process_fronts} & \VAR{i} \BLOCK{endfor}\\\hline
-        \end{tabular}
-        \label{table1}
-    \end{table}
+\begin{table}[ht!]
+    \caption{Исходные данные для задачи}
+    \begin{tabular}{|c|c|c|c|c|c|c|c|c|}\hline
+        №№ операций \BLOCK{for i in range(parameters.operation_number)} & \VAR{i + 1}\BLOCK{endfor} \\\hline
+        $t_{\text{шт}}$ \BLOCK{for i in parameters.process_times}       & \VAR{i} \BLOCK{endfor}    \\\hline
+        $C$ \BLOCK{for i in parameters.process_fronts}                  & \VAR{i} \BLOCK{endfor}    \\\hline
+    \end{tabular}
+    \label{table1}
+\end{table}
 
-    \section*{\centering Решение задачи}
+\section*{\centering Решение задачи}
 
-    \begin{enumerate}[1.]
-        \item Расчёт длительности технологического цикла простого процесса:
-            \begin{enumerate}
-                \item При последовательном виде движения:
+\begin{enumerate}[1.]
+    \item Расчёт длительности технологического цикла простого процесса:
+          \begin{enumerate}
+              \item При последовательном виде движения:
 
-                $T_{\text{тех. посл}} = n_{\text{оп}} \cdot \sum_{i = 1}^{N}\frac{t_{i}}{c_{i}} = \VAR{parameters.print_time_sequential_tech_cycle()} = \VAR{parameters.time_sequential_tech_cycle}~\text{мин}$
+                    $T_{\text{тех. посл}} = n_{\text{оп}} \cdot \sum_{i = 1}^{N}\frac{t_{i}}{c_{i}} = \VAR{parameters.print_time_sequential_tech_cycle()} = \VAR{parameters.time_sequential_tech_cycle}~\text{мин}$
+              \item При параллельно-последовательном виде движения:
 
-                \item При параллельно-последовательном виде движения:
+                    $T_{\text{тех. пар-посл}} = n_{\text{оп}} \cdot \sum_{i = 1}^{N}\frac{t_{i}}{c_{i}} - (n_{\text{оп}} - n_{\text{тр}}) \cdot \sum_{i = 1}^{N - 1}\frac{t_{ki}}{c_{i}} = \VAR{parameters.print_time_sequential_parallel_tech_cycle()} = \VAR{parameters.time_sequential_parallel_tech_cycle}~\text{мин}$
+              \item При параллельном виде движения:
 
-                $T_{\text{тех. пар-посл}} = n_{\text{оп}} \cdot \sum_{i = 1}^{N}\frac{t_{i}}{c_{i}} - (n_{\text{оп}} - n_{\text{тр}}) \cdot \sum_{i = 1}^{N - 1}\frac{t_{ki}}{c_{i}} = \VAR{parameters.print_time_sequential_parallel_tech_cycle()} = \VAR{parameters.time_sequential_parallel_tech_cycle}~\text{мин}$
+                    $T_{\text{тех. пар}} = (n_{\text{оп}} - n_{\text{тр}}) \cdot \frac{t_{imax}}{c_{i}} + n_{\text{тр}} \cdot \sum_{i = 1}^{N} \frac{t_{i}}{c_{i}} = \VAR{parameters.print_time_parallel_tech_cycle()} = \VAR{parameters.time_parallel_tech_cycle}~\text{мин}$
+          \end{enumerate}
+    \item Расчёт длительности производственного цикла простого процесса:
+          \begin{enumerate}
+              \item При последовательном виде движения:
 
-                \item При параллельном виде движения:
+                    $T_{\text{пр. посл}} = T_{\text{тех. посл}} + N \cdot t_{\text{посл мо}} = \VAR{parameters.time_sequential_tech_cycle} + \VAR{parameters.operation_number} \cdot \VAR{parameters.interoperational_break_sequential} = \VAR{parameters.time_sequential_prod_cycle}~\text{мин}$
+              \item При параллельно-последовательном виде движения:
 
-                $T_{\text{тех. пар}} = (n_{\text{оп}} - n_{\text{тр}}) \cdot \frac{t_{imax}}{c_{i}} + n_{\text{тр}} \cdot \sum_{i = 1}^{N} \frac{t_{i}}{c_{i}} = \VAR{parameters.print_time_parallel_tech_cycle()} = \VAR{parameters.time_parallel_tech_cycle}~\text{мин}$
-            \end{enumerate}
-        \item Расчёт длительности производственного цикла простого процесса:
-            \begin{enumerate}
-                \item При последовательном виде движения:
+                    $T_{\text{пр. пар-посл}} = T_{\text{тех. пар-посл}} + N \cdot t_{\text{пар-посл мо}} = \VAR{parameters.time_sequential_parallel_tech_cycle} + \VAR{parameters.operation_number} \cdot \VAR{parameters.interoperational_break_sequential_parallel} = \VAR{parameters.time_sequential_parallel_prod_cycle}~\text{мин}$
+              \item При параллельном виде движения:
+              
+                    $T_{\text{пр. пар}} = T_{\text{тех. посл}} + N \cdot t_{\text{пар мо}} = \VAR{parameters.time_parallel_tech_cycle} + \VAR{parameters.operation_number} \cdot \VAR{parameters.interoperational_break_parallel} = \VAR{parameters.time_parallel_prod_cycle}~\text{мин}$
+          \end{enumerate}
+    \item Графики:
+          \begin{enumerate}
+              \item При последовательном виде движения: см. рисунок~\ref{fig1}.
+                    \begin{figure}[ht!]
+                        \VAR{parameters.draw_sequential()}
+                        \includegraphics[width=\textwidth]{sequential}
+                        \caption{График при последовательном виде движения}
+                        \label{fig1}
+                    \end{figure}
+              \item При параллельно-последовательном виде движения: см. рисунок~\ref{fig2}.
+                    \begin{figure}[ht!]
+                        \VAR{parameters.draw_sequential_parallel()}
+                        \includegraphics[width=\textwidth]{sequential-parallel}
+                        \caption{График при параллельно-последовательном виде движения}
+                        \label{fig2}
+                    \end{figure}
+              \item При параллельном виде движения: см. рисунок~\ref{fig3}.
+                    \begin{figure}[ht!]
+                        \VAR{parameters.draw_parallel()}
+                        \includegraphics[width=\textwidth]{parallel}
+                        \caption{График при параллельном виде движения}
+                        \label{fig3}
+                    \end{figure}
+          \end{enumerate}
+    \item Сопоставление длительности технологического и производственного циклов простого процесса:
+          \begin{enumerate}
+              \item При последовательном виде движения:
 
-                $T_{\text{пр. посл}} = T_{\text{тех. посл}} + N \cdot t_{\text{посл мо}} = \VAR{parameters.time_sequential_tech_cycle} + \VAR{parameters.operation_number} \cdot \VAR{parameters.interoperational_break_sequential} = \VAR{parameters.time_sequential_prod_cycle}~\text{мин}$
+                    $T_{\text{пр. посл}} - T_{\text{тех. посл}} = \VAR{parameters.time_sequential_prod_cycle} - \VAR{parameters.time_sequential_tech_cycle} = \VAR{parameters.time_sequential_prod_cycle - parameters.time_sequential_tech_cycle}~\text{мин}$
+              \item При последовательно-параллельном виде движения:
 
-                \item При параллельно-последовательном виде движения:
+                    $T_{\text{пр. посл}} - T_{\text{тех. посл}} = \VAR{parameters.time_sequential_parallel_prod_cycle} - \VAR{parameters.time_sequential_parallel_tech_cycle} = \VAR{parameters.time_sequential_parallel_prod_cycle - parameters.time_sequential_parallel_tech_cycle}~\text{мин}$
+              \item При параллельном виде движения:
 
-                $T_{\text{пр. пар-посл}} = T_{\text{тех. пар-посл}} + N \cdot t_{\text{пар-посл мо}} = \VAR{parameters.time_sequential_parallel_tech_cycle} + \VAR{parameters.operation_number} \cdot \VAR{parameters.interoperational_break_sequential_parallel} = \VAR{parameters.time_sequential_parallel_prod_cycle}~\text{мин}$
+                    $T_{\text{пр. посл}} - T_{\text{тех. посл}} = \VAR{parameters.time_parallel_prod_cycle} - \VAR{parameters.time_parallel_tech_cycle} = \VAR{parameters.time_parallel_prod_cycle - parameters.time_parallel_tech_cycle}~\text{мин}$
+          \end{enumerate}
+\end{enumerate}
 
-                \item При параллельном виде движения:
+Наиболее длительные технологический и производственный циклы – при последовательном виде движения, когда партии деталей обрабатываются последовательно (следующая операции в цикле начинается только тогда, когда заканчивается обработка последней партии предыдущей операции производственного цикла). Последовательный вид обработки деталей целесообразно применять при небольших партиях и непродолжительных операциях.
 
-                $T_{\text{пр. пар}} = T_{\text{тех. посл}} + N \cdot t_{\text{пар мо}} = \VAR{parameters.time_parallel_tech_cycle} + \VAR{parameters.operation_number} \cdot \VAR{parameters.interoperational_break_parallel} = \VAR{parameters.time_parallel_prod_cycle}~\text{мин}$
-            \end{enumerate}
-        \item Графики
+Сократить технологический и производственный циклы простого процесса можно путём применения параллельно-последовательного вида движения. Транспортная партия обрабатывается на каждой операции без перерывов, и достигается сокращение технологического цикла на некоторую величину за счёт частичного параллельного выполнения работ на смежных операциях.
 
-        \item Сопоставление длительности технологического и производственного циклов простого процесса:
-            \begin{enumerate}
-                \item При последовательном виде движения:
-                
-                $T_{\text{пр. посл}} - T_{\text{тех. посл}} = \VAR{parameters.time_sequential_prod_cycle} - \VAR{parameters.time_sequential_tech_cycle} = \VAR{parameters.time_sequential_prod_cycle - parameters.time_sequential_tech_cycle}~\text{мин}$
-                \item При последовательно-параллельном виде движения:
+Самое значительное сокращение технологического и производственного циклов можно получить при использовании параллельного вида движения партий деталей по операциям за счёт того, что с операции на операцию детали передаются транспортными партиями, тогда по каждой партии ведётся работа на всех операциях технологического процесса без перерывов, т.е. без пролёживания деталей.
 
-                $T_{\text{пр. посл}} - T_{\text{тех. посл}} = \VAR{parameters.time_sequential_parallel_prod_cycle} - \VAR{parameters.time_sequential_parallel_tech_cycle} = \VAR{parameters.time_sequential_parallel_prod_cycle - parameters.time_sequential_parallel_tech_cycle}~\text{мин}$
-                \item При параллельном виде движения:
-
-                $T_{\text{пр. посл}} - T_{\text{тех. посл}} = \VAR{parameters.time_parallel_prod_cycle} - \VAR{parameters.time_parallel_tech_cycle} = \VAR{parameters.time_parallel_prod_cycle - parameters.time_parallel_tech_cycle}~\text{мин}$
-            \end{enumerate} 
-    \end{enumerate}
-
-    Наиболее длительные технологический и производственный циклы – при последовательном виде движения, когда партии деталей обрабатываются последовательно (следующая операции в цикле начинается только тогда, когда заканчивается обработка последней партии предыдущей операции производственного цикла). Последовательный вид обработки деталей целесообразно применять при небольших партиях и непродолжительных операциях.
-
-    Сократить технологический и производственный циклы простого процесса можно путём применения параллельно-последовательного вида движения. Транспортная партия обрабатывается на каждой операции без перерывов, и достигается сокращение технологического цикла на некоторую величину за счёт частичного параллельного выполнения работ на смежных операциях.
-
-    Самое значительное сокращение технологического и производственного циклов можно получить при использовании параллельного вида движения партий деталей по операциям за счёт того, что с операции на операцию детали передаются транспортными партиями, тогда по каждой партии ведётся работа на всех операциях технологического процесса без перерывов, т.е. без пролёживания деталей.
-
-    Недостатками параллельного и последовательно-параллельного видов движения деталей являются высокие транспортные расходы, так как при таких видах движения увеличивается число транспортных партий. Следовательно, чтобы сократить транспортные расходы, параллельный и последовательно- параллельный виды движения целесообразно использовать в случаях, когда рабочие места расположены по ходжу операции технологического процесса.
+Недостатками параллельного и последовательно-параллельного видов движения деталей являются высокие транспортные расходы, так как при таких видах движения увеличивается число транспортных партий. Следовательно, чтобы сократить транспортные расходы, параллельный и последовательно- параллельный виды движения целесообразно использовать в случаях, когда рабочие места расположены по ходжу операции технологического процесса.
 \end{document}
