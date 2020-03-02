@@ -21,6 +21,8 @@
 
 Величина транспортной (передаточной) партии: \VAR{parameters.transport_batch}.
 
+Продолжительность смены "--- \VAR{parameters.work_shift_duration}, режим работы участка "--- \VAR{parameters.work_shift_number}.
+
 Технологический процесс с нормами времени $t_{\text{шт}}$ и фронтом работ $C$ по операциям
 приведён в таблице~\ref{table1}.
 \begin{table}[ht!]
@@ -33,6 +35,7 @@
     \label{table1}
 \end{table}
 
+\newpage
 \section*{\centering Решение задачи}
 
 \begin{enumerate}[1.]
@@ -53,12 +56,24 @@
               \item При последовательном виде движения:
 
                     $T_{\text{пр. посл}} = T_{\text{тех. посл}} + N \cdot t_{\text{посл мо}} = \VAR{parameters.time_sequential_tech_cycle} + \VAR{parameters.operation_number} \cdot \VAR{parameters.interoperational_break_sequential} = \VAR{parameters.time_sequential_prod_cycle}~\text{мин}$
+
+                    Рассчитаем продолжительность производственного процесса в днях, приняв коэффициент загрузки \VAR{parameters.loading}:
+
+                    $T_{\text{пр. посл}} = \VAR{parameters.time_sequential_prod_cycle} \cdot \frac{1}{\VAR{parameters.loading} \cdot \VAR{parameters.work_shift_number} \cdot \VAR{parameters.work_shift_duration} \cdot 60} = \VAR{'%.3f' % (parameters.time_sequential_prod_cycle * 1 / (parameters.loading * parameters.work_shift_number * parameters.work_shift_duration * 60))}~\text{дн}$
               \item При параллельно-последовательном виде движения:
 
                     $T_{\text{пр. пар-посл}} = T_{\text{тех. пар-посл}} + N \cdot t_{\text{пар-посл мо}} = \VAR{parameters.time_sequential_parallel_tech_cycle} + \VAR{parameters.operation_number} \cdot \VAR{parameters.interoperational_break_sequential_parallel} = \VAR{parameters.time_sequential_parallel_prod_cycle}~\text{мин}$
+
+                    Рассчитаем продолжительность производственного процесса в днях, приняв коэффициент загрузки \VAR{parameters.loading}:
+
+                    $T_{\text{пр. посл}} = \VAR{parameters.time_sequential_parallel_prod_cycle} \cdot \frac{1}{\VAR{parameters.loading} \cdot \VAR{parameters.work_shift_number} \cdot \VAR{parameters.work_shift_duration} \cdot 60} = \VAR{'%.3f' % (parameters.time_sequential_parallel_prod_cycle * 1 / (parameters.loading * parameters.work_shift_number * parameters.work_shift_duration * 60))}~\text{дн}$
               \item При параллельном виде движения:
               
                     $T_{\text{пр. пар}} = T_{\text{тех. посл}} + N \cdot t_{\text{пар мо}} = \VAR{parameters.time_parallel_tech_cycle} + \VAR{parameters.operation_number} \cdot \VAR{parameters.interoperational_break_parallel} = \VAR{parameters.time_parallel_prod_cycle}~\text{мин}$
+
+                    Рассчитаем продолжительность производственного процесса в днях, приняв коэффициент загрузки \VAR{parameters.loading}:
+
+                    $T_{\text{пр. посл}} = \VAR{parameters.time_parallel_tech_cycle} \cdot \frac{1}{\VAR{parameters.loading} \cdot \VAR{parameters.work_shift_number} \cdot \VAR{parameters.work_shift_duration} \cdot 60} = \VAR{'%.3f' % (parameters.time_parallel_tech_cycle * 1 / (parameters.loading * parameters.work_shift_number * parameters.work_shift_duration * 60))}~\text{дн}$
           \end{enumerate}
     \item Графики:
           \begin{enumerate}

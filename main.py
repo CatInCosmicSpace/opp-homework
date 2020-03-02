@@ -22,7 +22,7 @@ latex_jinja_env = jinja2.Environment(
 )
 
 class Parameters:
-    def __init__(self, transport_batch, processing_batch, work_shift_duration, work_shift_number, process_times, process_fronts, interoperational_break_sequential, interoperational_break_sequential_parallel, interoperational_break_parallel):
+    def __init__(self, transport_batch, processing_batch, work_shift_duration, work_shift_number, process_times, process_fronts, interoperational_break_sequential, interoperational_break_sequential_parallel, interoperational_break_parallel, loading):
         assert len(process_times) == len(process_fronts)
         self.transport_batch = transport_batch
         self.processing_batch = processing_batch
@@ -37,6 +37,8 @@ class Parameters:
         self.interoperational_break_sequential = interoperational_break_sequential
         self.interoperational_break_sequential_parallel = interoperational_break_sequential_parallel
         self.interoperational_break_parallel = interoperational_break_parallel
+
+        self.loading = loading
 
         self.operations = [self.process_times[i] / self.process_fronts[i]
                            for i in range(self.operation_number)]
@@ -95,8 +97,7 @@ class Parameters:
         return plots
 
     def draw_sequential(self):
-        plt.cla()
-        
+        plt.cla()       
 
         fig, ax1 = plt.subplots()
         ax1.set_aspect('equal')
@@ -288,7 +289,8 @@ if __name__ == "__main__":
         process_fronts=[1, 1, 1, 1, 1, 2, 1, 1],
         interoperational_break_sequential=90,
         interoperational_break_sequential_parallel=30,
-        interoperational_break_parallel=5
+        interoperational_break_parallel=5,
+        loading=0.8
     )
     template = latex_jinja_env.get_template('main.tex.j2')
     with open('main.tex', 'wb') as file:
